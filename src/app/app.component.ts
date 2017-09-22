@@ -33,6 +33,7 @@ export class MyApp {
       { title: 'Hello Ionic', component: HelloIonicPage },
       { title: 'My First List', component: ListPage },
       { title: 'Aqua', component: AquaPage },
+      { title: 'Settings', component: SettingsPage },
     ];
   }
 
