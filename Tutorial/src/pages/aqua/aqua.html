@@ -18,4 +18,56 @@
 		<li> Tiffany's jewelry boxes </li>
 	</ul>
 
+    <button onclick="writeGroupData(2915419, 1, 10,1)">test it out</button>
+    <button onclick="createGroup(120)">new group</button>
+
 </ion-content>
+
+<script>
+    // JavaScript source code
+
+    var talking;
+    var userId;
+
+    var database = firebase.database();
+    var groupRef = database.ref('groups');
+    var userRef = database.ref('Users');
+
+    /**
+    Should create a random group id and then call writeGroupData
+    */
+    function createGroup(length) {
+        var newId = groupRef.push();
+        writeGroupData(newId, 1, length, length);
+    }
+
+    </script>
+<script>
+    var database = firebase.database();
+    var groupRef = database.ref('Groups');
+    var userRef = database.ref('Users');
+
+    function createU(uId, nm) {
+
+        database.ref('Users/' + uId).set({ name: nm });
+    }
+
+    /**
+    Should write a new group to the firebase database
+    */
+    function writeGroupData(groupId, gSize, mLength, gTalkTime) {
+        firebase.database().ref('Groups/' + groupId).set({
+            groupSize: gSize,
+            meetingLength: mLength,
+            goalTalkTime: gTalkTime
+        });
+    }
+    /**
+    Should add to the correct group's groupSize and modify goalTalkTime
+    */
+    function addToGroup(gId, userId) {
+        database.ref('groups/' + gId).set({ groupSize: groupSize++, goalTalkTime: goalTalkTime / groupSize });
+        database.ref('Users/' + userId).set({ groupId: gId });
+
+    }
+</script>
