@@ -1,0 +1,195 @@
+﻿<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <title>Ionic App</title>
+  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="msapplication-tap-highlight" content="no">
+
+  <link rel="icon" type="image/x-icon" href="assets/icon/favicon.ico">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4e8ef7">
+
+  <!-- cordova.js required for cordova apps -->
+  <script src="cordova.js"></script>
+
+  <!-- un-comment this code to enable service worker
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log('service worker installed'))
+        .catch(err => console.error('Error', err));
+    }
+  </script>-->
+
+  <link href="build/main.css" rel="stylesheet">
+
+</head>
+<body>
+
+  <!-- Ionic's root component and where the app will load -->
+  <ion-app></ion-app>
+    <script src="https://www.gstatic.com/firebasejs/4.4.0/firebase.js"></script>
+    <script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyATwzDv1p2K_NPjAcWg4sg0kIDnQb4imKI",
+    authDomain: "tabletalke-44822.firebaseapp.com",
+    databaseURL: "https://tabletalke-44822.firebaseio.com",
+    projectId: "tabletalke-44822",
+    storageBucket: "tabletalke-44822.appspot.com",
+    messagingSenderId: "502676505782"
+  };
+  firebase.initializeApp(config);
+    </script>
+  <!-- The polyfills js is generated during the build process -->
+  <script src="build/polyfills.js"></script>
+
+  <!-- The vendor js is generated during the build process
+       It contains all of the dependencies in node_modules -->
+  <script src="build/vendor.js"></script>
+
+  <!-- The main bundle js is generated during the build process -->
+  <script src="build/main.js"></script>
+
+    <!--Database Management code-->
+    <script>
+        // JavaScript source code
+        var database = firebase.database();
+        var groupRef = database.ref('Groups');
+        var userRef = database.ref("Users");
+        var userId;
+        var length;
+        var gID;
+        /**
+        Should write a new group to the firebase database
+        */
+        function writeGroupData(groupId, gSize, mLength, gTalkTime) {
+            firebase.database().ref('Groups/' + groupId).set({
+                groupSize: gSize,
+                meetingLength: mLength,
+                goalTalkTime: gTalkTime
+            });
+            addToGroup(groupId);
+        }
+        /**
+        Should create a random group id and then call writeGroupData
+        */
+        function createGroup() {
+            var newId = groupRef.push().key;
+            gID = newId;
+            writeGroupData(newId, 0, length, length);
+            createSpeaker(newId);
+            document.getElementById("groupIdDisplay").innerHTML = newId;
+        }
+        function join() {
+            var gid = document.getElementById("groupJoin").value;
+            addToGroup(gid);
+            gId = gid;
+        }
+        function addToGroup(gId) {
+            
+            var u = database.ref("Users/" + userId + "/groupId");
+            u.transaction(function (currentId) {
+                return gId;
+            })
+            var x = database.ref("Groups/" + gId + "/groupSize");
+            x.transaction(function (currentVal) {
+                return currentVal + 1;
+
+            })
+        }
+
+        function updateNumber() {
+            var x = document.getElementById("size").value;
+            length = x;
+        }
+
+        function createSpeaker(gId) {
+            
+            database.ref("Speaker/" + gId).set({ userId: userId, groupId: gId, startTime: 0, stopTime: 0 });
+        }
+        function changeSpeaker() {
+            var timeTalked;
+            var oldSpeaker;
+            //Updating Speaker userId and pulling old Id for later use
+            var z = database.ref("Speaker/" + gID + "/userId");
+            z.transaction(function (cSpeak) {
+                oldSpeaker = cSpeak;
+                return userId;
+            });
+
+            var y = database.ref("Speaker/" + gID + "/startTime");
+            y.transaction(function (newTime) {
+                timeTalked = Date.now() - newTime;
+                return Date.now();
+            })
+            var x = database.ref("Users/" + oldSpeaker + "/talkTime");
+            x.transaction(function (currentVal) {
+                return currentVal + timeTalked;
+            })
+
+            modifyColor();
+        }
+
+        function modifyColor(){
+            console.log('userId is ' + userId);
+            var userTalkTime = 0;
+            var goalTalkTime = 3;
+            var colors = ['#4A2BAD','#C4030A', '#B5081F', '#A60D33', '#961247', '#87175C', '#781C70', '#692185', '#592699', '#4A2BAD', '#3B30C2'];
+            var timeRatio = 1;
+            var colorIndex = 0;
+
+            database.ref("Users/" + userId + "/talkTime").on('value', function(snapshot) {
+                userTalkTime = snapshot.val();
+            });
+
+            console.log('User Talk Time is ' + userTalkTime);
+            console.log('Goal Talk Time is ' + goalTalkTime);
+
+            if (userTalkTime <= 1) {
+              document.getElementById("screen-color").style.background = "#3380FF";
+            }
+
+            else if (userTalkTime == 3) {
+              document.getElementById("screen-color").style.background = "#833EE7";
+            }
+
+            else if (userTalkTime == 4) {
+              document.getElementById("screen-color").style.background = "#ED3B56";
+            }
+
+        }
+
+        function wholeNumber(ratio) {
+            while (ratio < 0) {
+                ratio * 10;
+            }
+            return ratio;
+        }
+
+        function createUser() {
+            var uid = document.getElementById("username").value;
+            var name = document.getElementById("name").value;
+            userId = uid;
+            database.ref("Users/" + uid).set({ name: name, talkTime: 0 });
+        }
+
+        function signIn() {
+            var uid = document.getElementById("existing").value;
+            var ref = database.ref("Users");
+            ref.once("value").then(function (snapshot) {
+                var a = snapshot.exists();
+                var b = snapshot.child(uid).exists();
+                if (!b)
+                    alert("No Existing User");
+                else {
+                    userId = uid;
+                  }
+            });
+        }
+
+    </script>
+</body>
+</html>

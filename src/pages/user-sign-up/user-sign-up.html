@@ -1,0 +1,41 @@
+<!--
+  Generated template for the UserSignUpPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>UserSignUp</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+    <label>Sign in existing user:</label>
+    <input id="existing" placeholder="Username" />
+    <p></p>
+
+    <button ion-button round onclick="signIn()">Check User</button>
+    <br />
+
+
+    <label color="primary" stacked>Username</label>
+    <input id="username" placeholder="Username"/>
+    
+    <p></p>   
+
+    <label color="primary" stacked>Name</label>
+    <input placeholder="name" id="name" ng-model="name"/>
+        
+    <button ion-button round onclick="createUser()">Check Availability</button>
+
+    <p></p>
+
+    
+    <button enter (click)='enterHome();' ion-button full>Log In</button> 
+
+
+</ion-content>

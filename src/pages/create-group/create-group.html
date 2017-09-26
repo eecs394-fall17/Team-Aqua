@@ -1,0 +1,33 @@
+<!--
+  Generated template for the CreateGroupPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+
+<script type="text/javascript">
+	
+</script>
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Create Group</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+    <label>Meeting Length:</label>
+    <input oninput="updateNumber()" type="number" id="size"/> 
+
+    <button id="create" onclick="createGroup()" ion-button round>Create</button>
+	  <p> Use This Group ID </p>
+    <p id="groupIdDisplay"></p>
+
+    <button joinMeeting (click)='joinMeeting();' ion-button full>Join Meeting</button>
+
+
+</ion-content>
+
