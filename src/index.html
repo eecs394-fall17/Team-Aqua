@@ -63,7 +63,7 @@
         var gID = null;
         var talking = false;
 
-     
+        //Causes code to run updateTalkTime every 1000ms
         setInterval(updateTalkTime, 1000);
         
 
@@ -89,11 +89,13 @@
             createSpeaker(newId);
             document.getElementById("groupIdDisplay").innerHTML = newId;
         }
+
         function join() {
             var gid = document.getElementById("groupJoin").value;
             gID = gid;
             addToGroup();
         }
+
         function addToGroup() {
             
             var u = database.ref("Users/" + userId + "/groupId");
@@ -111,6 +113,7 @@
             var x = document.getElementById("size").value;
             length = x;
         }
+
         function updateTalkTime() {
             database.ref("Speaker/" + gID + "/userId").on('value', function (snapshot) {
                 if (snapshot.val() != userId)
@@ -123,6 +126,7 @@
                 })
             }
         }
+
         function createSpeaker(gId) {
             
             database.ref("Speaker/" + gId).set({ userId: userId, groupId: gId, startTime: 0, stopTime: 0 });
@@ -137,7 +141,8 @@
             });
             modifyColor();
         }
-        function modifyColor(){
+
+        function modifyColor() {
             console.log('userId is ' + userId);
             var talkTimeRef = database.ref("Users/" + userId + "/talkTime");
             var meetingLengthRef = database.ref('Groups/' + gID + '/meetingLength');
