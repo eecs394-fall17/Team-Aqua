@@ -122,6 +122,7 @@
             if (talking) {
                 var x = database.ref("Users/" + userId + "/talkTime");
                 x.transaction(function (currentTime) {
+                    modifyColor();
                     return currentTime + 1000;
                 })
             }
