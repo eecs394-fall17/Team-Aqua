@@ -58,10 +58,15 @@
         // JavaScript source code
         var database = firebase.database();
         var groupRef = database.ref('Groups');
-        var userRef = database.ref("Users");
         var userId;
         var length;
-        var gID;
+        var gID = null;
+        var talking = false;
+
+     
+        setInterval(updateTalkTime, 1000);
+        
+
         /**
         Should write a new group to the firebase database
         */
@@ -71,7 +76,8 @@
                 meetingLength: mLength,
                 goalTalkTime: gTalkTime
             });
-            addToGroup(groupId);
+            gID = groupId;
+            addToGroup();
         }
         /**
         Should create a random group id and then call writeGroupData
@@ -85,16 +91,16 @@
         }
         function join() {
             var gid = document.getElementById("groupJoin").value;
-            addToGroup(gid);
-            gId = gid;
+            gID = gid;
+            addToGroup();
         }
-        function addToGroup(gId) {
+        function addToGroup() {
             
             var u = database.ref("Users/" + userId + "/groupId");
             u.transaction(function (currentId) {
-                return gId;
+                return gID;
             })
-            var x = database.ref("Groups/" + gId + "/groupSize");
+            var x = database.ref("Groups/" + gID + "/groupSize");
             x.transaction(function (currentVal) {
                 return currentVal + 1;
 
@@ -105,34 +111,32 @@
             var x = document.getElementById("size").value;
             length = x;
         }
-
+        function updateTalkTime() {
+            database.ref("Speaker/" + gID + "/userId").on('value', function (snapshot) {
+                if (snapshot.val() != userId)
+                    talking = false;
+            });
+            if (talking) {
+                var x = database.ref("Users/" + userId + "/talkTime");
+                x.transaction(function (currentTime) {
+                    return currentTime + 1000;
+                })
+            }
+        }
         function createSpeaker(gId) {
             
             database.ref("Speaker/" + gId).set({ userId: userId, groupId: gId, startTime: 0, stopTime: 0 });
         }
+        
         function changeSpeaker() {
-            var timeTalked;
-            var oldSpeaker;
-            //Updating Speaker userId and pulling old Id for later use
-            var z = database.ref("Speaker/" + gID + "/userId");
-            z.transaction(function (cSpeak) {
-                oldSpeaker = cSpeak;
+            talking = true;
+            console.log(gID);
+            var x = database.ref("Speaker/" + gID + "/userId");
+            x.transaction(function (currentSpeaker) {
                 return userId;
             });
-
-            var y = database.ref("Speaker/" + gID + "/startTime");
-            y.transaction(function (newTime) {
-                timeTalked = Date.now() - newTime;
-                return Date.now();
-            })
-            var x = database.ref("Users/" + oldSpeaker + "/talkTime");
-            x.transaction(function (currentVal) {
-                return currentVal + timeTalked;
-            })
-
             modifyColor();
         }
-
         function modifyColor(){
             console.log('userId is ' + userId);
             var userTalkTime = 0;
