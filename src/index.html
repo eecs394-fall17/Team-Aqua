@@ -139,38 +139,58 @@
         }
         function modifyColor(){
             console.log('userId is ' + userId);
-            var userTalkTime = 0;
-            var goalTalkTime = 3;
-            var colors = ['#4A2BAD','#C4030A', '#B5081F', '#A60D33', '#961247', '#87175C', '#781C70', '#692185', '#592699', '#4A2BAD', '#3B30C2'];
+            var talkTimeRef = database.ref("Users/" + userId + "/talkTime");
+            var meetingLengthRef = database.ref('Groups/' + gID + '/meetingLength');
+            var groupSizeRef = database.ref('Groups/' + gID + '/groupSize');
+            var groupSize = 0;
+            var userTalkTime = 0.1;
+            var goalTalkTime = 1;
+            var meetingLengthTime = 0;
+            var colorsOverTime = ["#991A66", "#991A66", "#A3175C", "#AD1452", "#C20F3D", "#CC0D33", "#D60A29", "#E0081F", "#EB0514", "#FF0000"];
+            var colorsUnderTime = ["#3333CC", "#3333CC", "#3D30C2", "#472EB8", "#522BAD", "#5C29A3", "#662699", "#70248F", "#7A2185", "#851F7A"];
             var timeRatio = 1;
             var colorIndex = 0;
 
-            database.ref("Users/" + userId + "/talkTime").on('value', function(snapshot) {
+            groupSizeRef.on('value', function(snapshot) {
+                groupSize = snapshot.val();
+            })
+
+            talkTimeRef.on('value', function(snapshot) {
                 userTalkTime = snapshot.val();
             });
 
-            console.log('User Talk Time is ' + userTalkTime);
-            console.log('Goal Talk Time is ' + goalTalkTime);
+            meetingLengthRef.on('value', function(snapshot) {
+                meetingLengthTime = snapshot.val()*1000*60;
+                goalTalkTime = snapshot.val()*1000*60/groupSize;
+            });
 
-            if (userTalkTime <= 1) {
-              document.getElementById("screen-color").style.background = "#3380FF";
+            console.log('User Talk Time is' + userTalkTime);
+            console.log('GoalTalkTime' + goalTalkTime);
+
+            if (userTalkTime < goalTalkTime) {
+                timeRatio = userTalkTime/goalTalkTime;
+                colorIndex = Math.round(timeRatio*10);
+                console.log('Under time! ColorIndex is' + colorIndex + 'and the color is ' + colorsUnderTime[colorIndex]);
+                console.log('UserTalkTime is' + userTalkTime);
+                console.log('GoalTalkTime is' + goalTalkTime);
+                document.getElementById("screen-color").style.backgroundColor = colorsUnderTime[colorIndex];
             }
-
-            else if (userTalkTime == 3) {
-              document.getElementById("screen-color").style.background = "#833EE7";
+            
+            else if (userTalkTime >= goalTalkTime) {
+                //Initiate a new talk time 
+                var timeRemaining = meetingLengthTime - goalTalkTime;
+                var newTalkTime = userTalkTime - goalTalkTime;
+                timeRatio = newTalkTime/timeRemaining;
+                if (timeRatio >= 1) {
+                    return document.getElementById("screen-color").style.backgroundColor = colorsOverTime[length-1];
+                }
+                colorIndex = Math.round(timeRatio*10);
+                console.log('Over time! ColorIndex is' + colorIndex);
+                console.log('UserTalkTime is' + userTalkTime);
+                console.log('timeRemaining is' + timeRemaining);
+                console.log('newTalkTime is' + newTalkTime);
+                document.getElementById("screen-color").style.backgroundColor = colorsOverTime[colorIndex];
             }
-
-            else if (userTalkTime == 4) {
-              document.getElementById("screen-color").style.background = "#ED3B56";
-            }
-
-        }
-
-        function wholeNumber(ratio) {
-            while (ratio < 0) {
-                ratio * 10;
-            }
-            return ratio;
         }
 
         function createUser() {
