@@ -86,7 +86,7 @@
             var newId = groupRef.push().key;
             gID = newId;
             writeGroupData(newId, 0, length, length);
-            createSpeaker(newId);
+            createSpeaker();
             document.getElementById("groupIdDisplay").innerHTML = newId;
         }
 
@@ -128,14 +128,13 @@
             }
         }
 
-        function createSpeaker(gId) {
+        function createSpeaker() {
             
-            database.ref("Speaker/" + gId).set({ userId: userId, groupId: gId, startTime: 0, stopTime: 0 });
+            database.ref("Speaker/" + gID).set({ userId: userId, groupId: gID, startTime: 0, stopTime: 0 });
         }
         
         function changeSpeaker() {
             talking = true;
-            console.log(gID);
             var x = database.ref("Speaker/" + gID + "/userId");
             x.transaction(function (currentSpeaker) {
                 return userId;
@@ -213,9 +212,14 @@
                 var a = snapshot.exists();
                 var b = snapshot.child(uid).exists();
                 if (!b)
-                    alert("No Existing User");
+                    alert("No Matching User Found");
                 else {
+                    alert("Signed in!");
                     userId = uid;
+                    var y = database.ref("Users/" + uid + "/talkTime");
+                    y.transaction(function (oldTime) {
+                        return 0;
+                    });
                   }
             });
         }
