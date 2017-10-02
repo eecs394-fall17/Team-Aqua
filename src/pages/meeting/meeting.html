@@ -5,16 +5,28 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>meeting</ion-title>
-  </ion-navbar>
-
+  <ion-toolbar>
+    <ion-title>Meeting</ion-title>
+  </ion-toolbar>
 </ion-header>
 
+<!--
+<ion-content class="meeting-page">
+	<ion-slides pager>
+		<ion-slide>
+			<button id="color-button" ion-button full outline onclick="changeSpeaker()"></button>
+		</ion-slide>
+		<ion-slide>
+			<h2>Members in this Meeting</h2>
+			<p id="members"></p>
+		</ion-slide>
+	</ion-slides>
+</ion-content>
+-->
 
 <ion-content id="screen-color" padding>
 
-	<button id="color-button" ion-button round onclick="changeSpeaker()">Tap to Talk!</button>
+	<button id="color-button" ion-button full outline onclick="changeSpeaker()"></button>
+	<img style="width: 100%;" src="assets/scale.png">
 
 </ion-content>

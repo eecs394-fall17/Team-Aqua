@@ -14,11 +14,13 @@
 
 
 <ion-content padding>
+
     <label>Sign in existing user:</label>
     <input id="existing" placeholder="Username" />
     <p></p>
 
     <button ion-button round onclick="signIn()">Check User</button>
+    <p id="oldUserSignIn"></p>
     <br />
 
 
@@ -31,11 +33,12 @@
     <input placeholder="name" id="name" ng-model="name"/>
         
     <button ion-button round onclick="createUser()">Check Availability</button>
+    <p id="newUserSignIn"></p>
 
     <p></p>
 
     
-    <button enter (click)='enterHome();' ion-button full>Log In</button> 
+    <button enter (click)='enterHome();' ion-button full>Log In</button>
 
 
 </ion-content>

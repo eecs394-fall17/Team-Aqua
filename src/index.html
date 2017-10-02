@@ -62,6 +62,7 @@
         var length;
         var gID = null;
         var talking = false;
+        var members = "";
 
         //Causes code to run updateTalkTime every 1000ms
         setInterval(updateTalkTime, 1000);
@@ -94,11 +95,13 @@
             var gid = document.getElementById("groupJoin").value;
             gID = gid;
             addToGroup();
+            document.getElementById("joinGroupMessage").innerHTML = "We found your group! Proceed to your meeting.";
         }
 
         function addToGroup() {
             
             var u = database.ref("Users/" + userId + "/groupId");
+
             u.transaction(function (currentId) {
                 return gID;
             })
@@ -107,6 +110,22 @@
                 return currentVal + 1;
 
             })
+
+            //addToMembers();
+        }
+
+        function addToMembers() {
+            var nameRef = database.ref("Users/" + userId + "/name");
+            var displayName;
+            nameRef.on('value', function(snapshot) {
+                displayName = snapshot.val();
+            })
+
+            members = members + displayName + "<br>";
+        }
+
+        function refreshMembers() {
+            document.getElementById("meetingMembers").innerHTML = members;
         }
 
         function updateNumber() {
@@ -123,6 +142,7 @@
                 var x = database.ref("Users/" + userId + "/talkTime");
                 x.transaction(function (currentTime) {
                     modifyColor();
+                    timer();
                     return currentTime + 1000;
                 })
             }
@@ -140,6 +160,16 @@
                 return userId;
             });
             modifyColor();
+        }
+
+        function timer() {
+            var talkTimeRef = database.ref("Users/" + userId + "/talkTime");
+            var userTalkTime = 0.1;
+            talkTimeRef.on('value', function(snapshot) {
+                userTalkTime = snapshot.val();
+            });
+            document.getElementById("color-button").innerHTML = userTalkTime/1000;
+
         }
 
         function modifyColor() {
@@ -179,6 +209,8 @@
                 console.log('UserTalkTime is' + userTalkTime);
                 console.log('GoalTalkTime is' + goalTalkTime);
                 document.getElementById("screen-color").style.backgroundColor = colorsUnderTime[colorIndex];
+                document.getElementById("color-button").style.backgroundColor = colorsUnderTime[colorIndex];
+
             }
             
             else if (userTalkTime >= goalTalkTime) {
@@ -195,6 +227,7 @@
                 console.log('timeRemaining is' + timeRemaining);
                 console.log('newTalkTime is' + newTalkTime);
                 document.getElementById("screen-color").style.backgroundColor = colorsOverTime[colorIndex];
+                document.getElementById("color-button").style.backgroundColor = colorsOverTime[colorIndex];
             }
         }
 
@@ -203,6 +236,7 @@
             var name = document.getElementById("name").value;
             userId = uid;
             database.ref("Users/" + uid).set({ name: name, talkTime: 0 });
+            document.getElementById("newUserSignIn").innerHTML = "This username is not taken! Log in to continue.";
         }
 
         function signIn() {
@@ -214,7 +248,7 @@
                 if (!b)
                     alert("No Matching User Found");
                 else {
-                    alert("Signed in!");
+                    document.getElementById("oldUserSignIn").innerHTML = "Welcome back! Log in to continue.";
                     userId = uid;
                     var y = database.ref("Users/" + uid + "/talkTime");
                     y.transaction(function (oldTime) {
@@ -225,5 +259,19 @@
         }
 
     </script>
+
+    <style>
+        
+        #color-button {
+            width: 100%;
+            display: inline-block;
+            height: 100%;
+            border: none;
+            background-color: #fff;
+            color: #fff;
+        }
+
+    </style>
+
 </body>
 </html>
