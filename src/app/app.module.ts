@@ -3,13 +3,15 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
-
+import { IonicStorageModule } from '@ionic/storage';
 import { MyApp } from './app.component';
+
 import { HomePage } from '../pages/home/home';
 import { CreateGroupPage } from '../pages/create-group/create-group';
 import { JoinGroupPage } from '../pages/join-group/join-group';
 import { UserSignUpPage } from '../pages/user-sign-up/user-sign-up';
 import { MeetingPage } from '../pages/meeting/meeting';
+import { TutorialPage } from '../pages/tutorial/tutorial';
 
 @NgModule({
   declarations: [
@@ -18,11 +20,13 @@ import { MeetingPage } from '../pages/meeting/meeting';
     CreateGroupPage,
     JoinGroupPage,
     UserSignUpPage,
-    MeetingPage
+    MeetingPage,
+    TutorialPage
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -31,7 +35,8 @@ import { MeetingPage } from '../pages/meeting/meeting';
     CreateGroupPage,
     JoinGroupPage,
     UserSignUpPage,
-    MeetingPage
+    MeetingPage,
+    TutorialPage
   ],
   providers: [
     StatusBar,
