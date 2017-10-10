@@ -237,6 +237,7 @@
             userId = uid;
             database.ref("Users/" + uid).set({ name: name, talkTime: 0 });
             document.getElementById("newUserSignIn").innerHTML = "This username is not taken! Log in to continue.";
+            document.getElementById("enter").style.display="block";
         }
 
         function signIn() {
@@ -269,6 +270,10 @@
             border: none;
             background-color: #fff;
             color: #fff;
+        }
+
+        #enter {
+            display: none;
         }
 
     </style>
