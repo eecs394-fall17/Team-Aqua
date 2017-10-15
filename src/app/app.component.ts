@@ -8,6 +8,7 @@ import { CreateGroupPage } from '../pages/create-group/create-group';
 import { JoinGroupPage } from '../pages/join-group/join-group';
 import { UserSignUpPage } from '../pages/user-sign-up/user-sign-up';
 import { MeetingPage } from '../pages/meeting/meeting';
+import { TutorialPage } from '../pages/tutorial/tutorial';
 
 @Component({
   templateUrl: 'app.html'

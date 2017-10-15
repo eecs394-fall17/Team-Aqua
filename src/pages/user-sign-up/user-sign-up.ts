@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { HomePage } from '../home/home';
-
+import { TutorialPage } from '../tutorial/tutorial';
 /**
  * Generated class for the UserSignUpPage page.
  *
@@ -18,7 +18,11 @@ export class UserSignUpPage {
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
-  enterHome() {
+  newUserEnterHome() {
+  		this.navCtrl.push(TutorialPage);
+  }
+
+  oldUserEnterHome() {
   		this.navCtrl.push(HomePage);
   }
 

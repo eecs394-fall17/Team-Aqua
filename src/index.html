@@ -67,7 +67,6 @@
         //Causes code to run updateTalkTime every 1000ms
         setInterval(updateTalkTime, 1000);
         
-
         /**
         Should write a new group to the firebase database
         */
@@ -237,7 +236,10 @@
             userId = uid;
             database.ref("Users/" + uid).set({ name: name, talkTime: 0 });
             document.getElementById("newUserSignIn").innerHTML = "This username is not taken! Log in to continue.";
-            document.getElementById("enter").style.display="block";
+
+            //When a new user is created, show a login button that brings them to tutorial
+            document.getElementById("enter-old-user").style.display="none";
+            document.getElementById("enter-new-user").style.display="block";
         }
 
         function signIn() {
@@ -255,8 +257,12 @@
                     y.transaction(function (oldTime) {
                         return 0;
                     });
+                    //If an old user returns, show a login button that brings them to home
+                    document.getElementById("enter-new-user").style.display="none";
+                    document.getElementById("enter-old-user").style.display="block";
                   }
             });
+            
         }
 
     </script>
@@ -272,9 +278,15 @@
             color: #fff;
         }
 
-        #enter {
+        #enter-new-user {
             display: none;
         }
+
+        #enter-old-user {
+            display: none;
+        }
+
+
 
     </style>
 
