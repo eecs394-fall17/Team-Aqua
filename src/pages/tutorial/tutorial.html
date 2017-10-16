@@ -9,24 +9,37 @@
 <ion-slides pager="true">
 
 	<ion-slide>
-		<p>When you speak, tap the screen once</p>
-	</ion-slide>
-
-	<ion-slide>
-		<p>The app records your talk time, until another person taps their screen</p>
-	</ion-slide>
-
-	<ion-slide>
-		<!-- Eureka still needs to figure out how to format so home button on this same slide-->
 		<ion-row>
-			<img src="assets/smartphone_colorchange.png">
+			<ion-col col-3></ion-col>
+			<ion-col col-6>
+				<img width="100" src="assets/tutorial_tapscreen.png"/>
+				<p height="50%">When you speak, tap the screen once</p>
+			</ion-col>
+			<ion-col col-3></ion-col>
 		</ion-row>
 	</ion-slide>
 
 	<ion-slide>
 		<ion-row>
-			<button ion-button color="light" style="margin:auto" (click)="goToHome()">Start using app</button>
+			<ion-col col-3></ion-col>
+			<ion-col col-6>
+				<img width="100" src="assets/tutorial_tapscreen_2.png"/>
+				<p height="50%">The app records your talk time, until another person taps their screen</p>
+			</ion-col>
+			<ion-col col-3></ion-col>
 		</ion-row>
 	</ion-slide>
-	
+
+	<ion-slide>
+		<ion-row>
+			<ion-col col-3></ion-col>
+			<ion-col col-6>
+				<img width="100" height="80" src="assets/smartphone_colorchange.png"/>
+				<p>A purple screen means you've spoken just the right amount of time in the group</p>
+				<button ion-button color="light" (click)="goToHome()">Begin</button>
+			</ion-col>
+			<ion-col col-3></ion-col>
+		</ion-row>
+	</ion-slide>
+
 </ion-slides>
