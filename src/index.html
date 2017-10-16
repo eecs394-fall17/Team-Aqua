@@ -83,11 +83,36 @@
         Should create a random group id and then call writeGroupData
         */
         function createGroup() {
-            var newId = groupRef.push().key;
+            var newId = document.getElementById("groupID").value;
             gID = newId;
             writeGroupData(newId, 0, length, length);
             createSpeaker();
+            document.getElementById("use").style.visibility = "visible";
             document.getElementById("groupIdDisplay").innerHTML = newId;
+        }
+
+        function checkGroupId() {
+            //Check user availability
+            var gid = document.getElementById("groupID").value;
+            var ref = database.ref("Groups");
+            ref.once("value").then(function (snapshot) {
+                var a = snapshot.exists();
+                var b = snapshot.child(gid).exists();
+                if (!b) {
+                    //Changes the icon display to green when username is available.
+                    document.getElementById("available2").style.color = "green";
+
+                    document.getElementById("create").style.display = "initial";
+                }
+                else {
+
+                    //Changes the icon display to red when username is not available.
+                    document.getElementById("available2").style.color = "red";
+
+                    document.getElementById("create").style.display = "none";
+
+                }
+            });
         }
 
         function join() {
