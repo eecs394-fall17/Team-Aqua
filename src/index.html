@@ -119,7 +119,31 @@
             var gid = document.getElementById("groupJoin").value;
             gID = gid;
             addToGroup();
+            //console.log("we are about to go into the getmembers function");
+            getMembers();
+            setInterval(displayMembers, 5000);
             document.getElementById("joinGroupMessage").innerHTML = "We found your group! Proceed to your meeting.";
+        }
+
+        function getMembers() {
+            console.log("we are in the getmembers function");
+            var query = firebase.database().ref("Users").orderByKey();
+            query.once("value")
+                .then(function(snapshot) {
+                    snapshot.forEach(function(childSnapshot) {
+                    // key will be "ada" the first time and "alan" the second time
+                        var tempGroupId = childSnapshot.child("groupId").val();
+                        //console.log(tempGroupId);
+                        if(tempGroupId == gID) {
+                            members = members + "<br>" + childSnapshot.child("name").val();
+                        }
+                    });
+                });
+        }
+
+        function displayMembers() {
+            document.getElementById("membersDisplay").innerHTML = members;
+            //console.log("We are in temp, outputting members\n" + members);
         }
 
         function addToGroup() {
@@ -134,22 +158,6 @@
                 return currentVal + 1;
 
             })
-
-            //addToMembers();
-        }
-
-        function addToMembers() {
-            var nameRef = database.ref("Users/" + userId + "/name");
-            var displayName;
-            nameRef.on('value', function(snapshot) {
-                displayName = snapshot.val();
-            })
-
-            members = members + displayName + "<br>";
-        }
-
-        function refreshMembers() {
-            document.getElementById("meetingMembers").innerHTML = members;
         }
 
         function updateNumber() {
