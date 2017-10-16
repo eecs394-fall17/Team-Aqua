@@ -62,7 +62,8 @@
         var length;
         var gID = null;
         var talking = false;
-        var members = "";
+        var membersDisplayInterval;
+        //var members = "Others in this group:";
 
         //Causes code to run updateTalkTime every 1000ms
         setInterval(updateTalkTime, 1000);
@@ -89,6 +90,10 @@
             createSpeaker();
             document.getElementById("use").style.visibility = "visible";
             document.getElementById("groupIdDisplay").innerHTML = newId;
+            
+            getMembers();
+            membersDisplayInterval = setInterval(getMembers, 10000);
+
         }
 
         function checkGroupId() {
@@ -120,13 +125,15 @@
             gID = gid;
             addToGroup();
             //console.log("we are about to go into the getmembers function");
-            getMembers();
-            setInterval(displayMembers, 5000);
             document.getElementById("joinGroupMessage").innerHTML = "We found your group! Proceed to your meeting.";
+
+            getMembers();
+            membersDisplayInterval = setInterval(getMembers, 10000);
         }
 
         function getMembers() {
             console.log("we are in the getmembers function");
+            var members = "Others in this group:";
             var query = firebase.database().ref("Users").orderByKey();
             query.once("value")
                 .then(function(snapshot) {
@@ -136,14 +143,14 @@
                         //console.log(tempGroupId);
                         if(tempGroupId == gID) {
                             members = members + "<br>" + childSnapshot.child("name").val();
+                            displayMembers(members);
                         }
                     });
                 });
         }
 
-        function displayMembers() {
-            document.getElementById("membersDisplay").innerHTML = members;
-            //console.log("We are in temp, outputting members\n" + members);
+        function displayMembers(display) {
+            document.getElementById("membersDisplay").innerHTML = display;
         }
 
         function addToGroup() {
@@ -186,6 +193,7 @@
         }
         
         function changeSpeaker() {
+            clearInterval(membersDisplayInterval);
             talking = true;
             var x = database.ref("Speaker/" + gID + "/userId");
             x.transaction(function (currentSpeaker) {
