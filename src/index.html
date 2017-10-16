@@ -235,11 +235,35 @@
             var name = document.getElementById("name").value;
             userId = uid;
             database.ref("Users/" + uid).set({ name: name, talkTime: 0 });
-            document.getElementById("newUserSignIn").innerHTML = "This username is not taken! Log in to continue.";
+            //document.getElementById("newUserSignIn").innerHTML = "This username is not taken! Log in to continue.";
+        }
 
-            //When a new user is created, show a login button that brings them to tutorial
-            document.getElementById("enter-old-user").style.display="none";
-            document.getElementById("enter-new-user").style.display="block";
+        function checkUsernameAvailability() {
+            //Check user availability
+            var uid = document.getElementById("username").value;
+            var ref = database.ref("Users");
+            ref.once("value").then(function (snapshot) {
+                var a = snapshot.exists();
+                var b = snapshot.child(uid).exists();
+                if (!b) {
+                    //Changes the icon display to green when username is available.
+                    document.getElementById("available").style.color = "green";
+
+                    //When a new user is created, show a login button that brings them to tutorial
+                    document.getElementById("enter-old-user").style.display = "none";
+                    document.getElementById("enter-new-user").style.display = "block";
+                }
+                else {
+
+                    //Changes the icon display to red when username is available.
+                    document.getElementById("available").style.color = "red";
+
+                    //Invalid username, don't display login buttons
+                    document.getElementById("enter-old-user").style.display = "none";
+                    document.getElementById("enter-new-user").style.display = "none";
+                }
+            });
+           
         }
 
         function signIn() {

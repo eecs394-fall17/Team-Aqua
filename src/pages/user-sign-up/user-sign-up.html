@@ -25,19 +25,18 @@
 
 
     <label color="primary" stacked>Username</label>
-    <input id="username" placeholder="Username"/>
+    <input id="username"  oninput="checkUsernameAvailability()" placeholder="Username"/>
     
     <p></p>   
 
     <label color="primary" stacked>Name</label>
     <input placeholder="name" id="name" ng-model="name"/>
-        
-    <button ion-button round onclick="createUser()">Check Availability</button>
+    <ion-icon id="available" name="checkmark-circle"style="color:red"></ion-icon>
     <p id="newUserSignIn"></p>
 
     <p></p>
     
-    <button id="enter-new-user" (click)='newUserEnterHome();' ion-button full>Log In</button>
+    <button id="enter-new-user" (click)='newUserEnterHome();' ion-button full onclick="createUser()">Log In</button>
     <button id="enter-old-user" (click)='oldUserEnterHome();' ion-button full>Log In</button>
 
 
