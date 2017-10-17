@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>UserSignUp</ion-title>
+    <ion-title>TableTalk</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -15,7 +15,8 @@
 
 <ion-content padding>
 
-    <label>Sign in existing user:</label>
+    <h1>Sign In to an Existing Account </h1>
+    <label>Username</label>
     <input id="existing" placeholder="Username" />
     <p></p>
 
@@ -23,20 +24,20 @@
     <p id="oldUserSignIn"></p>
     <br />
 
-
+    <h1>Create a New Account</h1>
     <label color="primary" stacked>Username</label>
     <input id="username"  oninput="checkUsernameAvailability()" placeholder="Username"/>
+    <ion-icon id="available" name="checkmark-circle"style="color:red"></ion-icon>
     
     <p></p>   
 
     <label color="primary" stacked>Name</label>
-    <input placeholder="name" id="name" ng-model="name"/>
-    <ion-icon id="available" name="checkmark-circle"style="color:red"></ion-icon>
+    <input placeholder="Jane Doe" id="name" ng-model="name"/>
     <p id="newUserSignIn"></p>
 
     <p></p>
     
-    <button id="enter-new-user" (click)='newUserEnterHome();' ion-button full onclick="createUser()">Log In</button>
+    <button id="enter-new-user" (click)='newUserEnterHome();' ion-button full onclick="createUser()">Create a New Account</button>
     <button id="enter-old-user" (click)='oldUserEnterHome();' ion-button full>Log In</button>
 
 
