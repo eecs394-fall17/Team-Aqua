@@ -195,6 +195,7 @@
         }
         
         function changeSpeaker() {
+            document.getElementById("talk-instructions").style.display="none";
             clearInterval(membersDisplayInterval);
             talking = true;
             var x = database.ref("Speaker/" + gID + "/userId");
@@ -210,7 +211,27 @@
             talkTimeRef.on('value', function(snapshot) {
                 userTalkTime = snapshot.val();
             });
-            document.getElementById("color-button").innerHTML = userTalkTime/1000;
+            var talkTimeTotal = userTalkTime/1000;
+            var talkTimeMins = Math.floor(talkTimeTotal/60);
+            var talkTimeSecs = talkTimeTotal%60;
+            var timerMins = "0" + talkTimeMins;
+            var timerSecs = "0" + talkTimeSecs;
+
+            // Display the additional "0" so that the timer looks normal
+            if (talkTimeMins >= 10) {
+                timerMins = talkTimeMins;
+            }
+            else if (talkTimeMins < 10) {
+                timerMins = "0" + talkTimeMins;
+            }
+            if (talkTimeSecs >= 10) {
+                timerSecs = talkTimeSecs;
+            }
+            else if (talkTimeSecs < 10) {
+                timerSecs = "0" + talkTimeSecs;
+            }
+
+            document.getElementById("color-button").innerHTML = timerMins + ":" + timerSecs;
 
         }
 
