@@ -6,9 +6,8 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-    
-        <button create (click)='createGroup();' ion-button full>Create Group</button>
-        <button join (click)='joinGroup();' ion-button full>Join Group</button>
-
-</ion-content>
+<ion-tabs>
+    <ion-tab [root]="userStatisticsRoot" tabTitle="User Statistics" tabIcon="information-circle"></ion-tab>
+    <ion-tab [root]="createGroupRoot" tabTitle="Create group" tabIcon="information-circle"></ion-tab>
+    <ion-tab [root]="joinGroupRoot" tabTitle="Join group" tabIcon="information-circle"></ion-tab>
+</ion-tabs>
