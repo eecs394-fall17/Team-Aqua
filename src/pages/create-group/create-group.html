@@ -19,10 +19,11 @@
 
 
 <ion-content padding>
-    <label>Meeting Length:</label>
-    <input oninput="updateNumber()" type="number" id="size"/> 
-
-    <input type="text" id="groupID" oninput="checkGroupId()" />
+    <label color="primary" stacked>Meeting Length (mins):</label>
+    <input placeholder="1" oninput="updateNumber()" type="number" id="size"/> 
+    <p></p>
+    <label color="primary" stacked>Meeting Name:</label>
+    <input placeholder="Our Awesome Discussion" type="text" id="groupID" oninput="checkGroupId()" />
     <ion-icon id="available2" name="checkmark-circle" style="color:green; display:none"></ion-icon>
     <ion-icon id="available3" name="close-circle" style="color:red"></ion-icon>
     <button id="create" onclick="createGroup()" ion-button round>Create</button>

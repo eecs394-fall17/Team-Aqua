@@ -195,7 +195,6 @@
         }
         
         function changeSpeaker() {
-            document.getElementById("talk-instructions").style.display="none";
             clearInterval(membersDisplayInterval);
             talking = true;
             var x = database.ref("Speaker/" + gID + "/userId");
@@ -232,6 +231,7 @@
             }
 
             document.getElementById("color-button").innerHTML = timerMins + ":" + timerSecs;
+            document.getElementById("color-button").style.fontSize = "500%"; 
 
         }
 
@@ -244,8 +244,8 @@
             var userTalkTime = 0.1;
             var goalTalkTime = 1;
             var meetingLengthTime = 0;
-            var colorsOverTime = ["#991A66", "#991A66", "#A3175C", "#AD1452", "#C20F3D", "#CC0D33", "#D60A29", "#E0081F", "#EB0514", "#FF0000"];
-            var colorsUnderTime = ["#3333CC", "#3333CC", "#3D30C2", "#472EB8", "#522BAD", "#5C29A3", "#662699", "#70248F", "#7A2185", "#851F7A"];
+            var colorsOverTime = ["#991A66", "#991A66", "#A3175C", "#AD1452", "#C20F3D", "#CC0D33", "#D60A29", "#E0081F", "#EB0514", "#FF0000"]; // These are ordered from purple to red; must be 10 colors
+            var colorsUnderTime = ["#3333CC", "#3333CC", "#3D30C2", "#472EB8", "#522BAD", "#5C29A3", "#662699", "#70248F", "#7A2185", "#851F7A"]; // These are ordered from blue to purple; must be 10 colors
             var timeRatio = 1;
             var colorIndex = 0;
 
@@ -262,35 +262,32 @@
                 goalTalkTime = snapshot.val()*1000*60/groupSize;
             });
 
-            console.log('User Talk Time is' + userTalkTime);
-            console.log('GoalTalkTime' + goalTalkTime);
-
             if (userTalkTime < goalTalkTime) {
                 timeRatio = userTalkTime/goalTalkTime;
                 colorIndex = Math.round(timeRatio*10);
-                console.log('Under time! ColorIndex is' + colorIndex + 'and the color is ' + colorsUnderTime[colorIndex]);
-                console.log('UserTalkTime is' + userTalkTime);
-                console.log('GoalTalkTime is' + goalTalkTime);
                 document.getElementById("screen-color").style.backgroundColor = colorsUnderTime[colorIndex];
                 document.getElementById("color-button").style.backgroundColor = colorsUnderTime[colorIndex];
 
             }
             
             else if (userTalkTime >= goalTalkTime) {
-                //Initiate a new talk time 
                 var timeRemaining = meetingLengthTime - goalTalkTime;
                 var newTalkTime = userTalkTime - goalTalkTime;
+                if (groupSize == 1) {
+                    timeRemaining = goalTalkTime;
+                } 
+
                 timeRatio = newTalkTime/timeRemaining;
+                
                 if (timeRatio >= 1) {
-                    return document.getElementById("screen-color").style.backgroundColor = colorsOverTime[length-1];
+                    document.getElementById("screen-color").style.backgroundColor = colorsOverTime[colorsOverTime.length-1];
+                    document.getElementById("color-button").style.backgroundColor = colorsOverTime[colorsOverTime.length-1];
                 }
-                colorIndex = Math.round(timeRatio*10);
-                console.log('Over time! ColorIndex is' + colorIndex);
-                console.log('UserTalkTime is' + userTalkTime);
-                console.log('timeRemaining is' + timeRemaining);
-                console.log('newTalkTime is' + newTalkTime);
-                document.getElementById("screen-color").style.backgroundColor = colorsOverTime[colorIndex];
-                document.getElementById("color-button").style.backgroundColor = colorsOverTime[colorIndex];
+                else {
+                    colorIndex = Math.round(timeRatio*10);
+                    document.getElementById("screen-color").style.backgroundColor = colorsOverTime[colorIndex];
+                    document.getElementById("color-button").style.backgroundColor = colorsOverTime[colorIndex];
+                }
             }
         }
 
@@ -356,15 +353,6 @@
     </script>
 
     <style>
-        
-        #color-button {
-            width: 100%;
-            display: inline-block;
-            height: 100%;
-            border: none;
-            background-color: #fff;
-            color: #fff;
-        }
 
         #enter-new-user {
             display: none;

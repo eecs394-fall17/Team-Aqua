@@ -1,9 +1,16 @@
 page-meeting {
 	#color-button {
 		font-size: 300%;
+		background-color: #3333CC;
+		color: #FFF;
+		text-transform: lowercase;
+		white-space: normal;
+		width: 100%;
+        display: inline-block;
+        height: 100%;
+        border: none;
 	}
-	#talk-instructions {
-		padding-top: 50%;
-		text-align: center;
+	#screen-color {
+		background-color: #3333CC;
 	}
 }
