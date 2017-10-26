@@ -10,7 +10,20 @@ page-meeting {
         height: 100%;
         border: none;
 	}
+	
 	#screen-color {
 		background-color: #3333CC;
 	}
+
+	#end-meeting {
+            width: 100%;
+            display: none;
+            height: 100%;
+            border: none;
+            background-color: #fff;
+            color: #fff;
+            font-size: 300%;
+            text-transform: lowercase;
+            white-space: normal;
+        }
 }

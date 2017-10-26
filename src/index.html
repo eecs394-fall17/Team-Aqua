@@ -63,6 +63,9 @@
         var gID = null;
         var talking = false;
         var membersDisplayInterval;
+        var meetingEndTime = 0;
+        var meetingLengthTime = 0;
+        var meetingStarted = false;
         //var members = "Others in this group:";
 
         //Causes code to run updateTalkTime every 1000ms
@@ -175,6 +178,20 @@
         }
 
         function updateTalkTime() {
+            
+            if(meetingEndTime == 0 && meetingStarted) {
+                meetingEndTime = Date.now() + meetingLengthTime;
+                console.log("Meeting end time: " + meetingEndTime)
+            } else if(meetingStarted && Date.now() >= meetingEndTime) {
+                console.log("Meeting has ended!");
+                document.getElementById("color-button").disabled = true;
+                document.getElementById("color-button").style.display = "none";
+                document.getElementById("end-meeting").disabled = false;
+                document.getElementById("end-meeting").style.backgroundColor = document.getElementById("color-button").style.backgroundColor;
+                document.getElementById("end-meeting").style.display = "block";
+            }
+
+
             database.ref("Speaker/" + gID + "/userId").on('value', function (snapshot) {
                 if (snapshot.val() != userId)
                     talking = false;
@@ -195,6 +212,7 @@
         }
         
         function changeSpeaker() {
+            meetingStarted = true;
             clearInterval(membersDisplayInterval);
             talking = true;
             var x = database.ref("Speaker/" + gID + "/userId");
@@ -243,7 +261,6 @@
             var groupSize = 0;
             var userTalkTime = 0.1;
             var goalTalkTime = 1;
-            var meetingLengthTime = 0;
             var colorsOverTime = ["#991A66", "#991A66", "#A3175C", "#AD1452", "#C20F3D", "#CC0D33", "#D60A29", "#E0081F", "#EB0514", "#FF0000"]; // These are ordered from purple to red; must be 10 colors
             var colorsUnderTime = ["#3333CC", "#3333CC", "#3D30C2", "#472EB8", "#522BAD", "#5C29A3", "#662699", "#70248F", "#7A2185", "#851F7A"]; // These are ordered from blue to purple; must be 10 colors
             var timeRatio = 1;
@@ -251,7 +268,7 @@
 
             groupSizeRef.on('value', function(snapshot) {
                 groupSize = snapshot.val();
-            })
+            });
 
             talkTimeRef.on('value', function(snapshot) {
                 userTalkTime = snapshot.val();

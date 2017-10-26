@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import { HomePage } from '../home/home';
 
 /**
  * Generated class for the MeetingPage page.
@@ -15,6 +16,10 @@ import { NavController, NavParams } from 'ionic-angular';
 export class MeetingPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+  }
+
+  backToHome() {
+  		this.navCtrl.push(HomePage);
   }
 
 }
