@@ -70,7 +70,6 @@
 
         //Causes code to run updateTalkTime every 1000ms
         setInterval(updateTalkTime, 1000);
-        
         /**
         Should write a new group to the firebase database
         */
@@ -78,7 +77,8 @@
             firebase.database().ref('Groups/' + groupId).set({
                 groupSize: gSize,
                 meetingLength: mLength,
-                goalTalkTime: gTalkTime
+                goalTalkTime: gTalkTime,
+                meetingEnd: 0
             });
             gID = groupId;
             addToGroup();
@@ -179,9 +179,19 @@
 
         function updateTalkTime() {
             
+            var meetingEndTimeRef = database.ref("Groups/" + gID + "/meetingEnd");
+            meetingEndTimeRef.on('value', function(snapshot) {
+                meetingEndTime = snapshot.val();
+            });
+
+            console.log("meeting end time after snapshot: " + meetingEndTime);
+
             if(meetingEndTime == 0 && meetingStarted) {
                 meetingEndTime = Date.now() + meetingLengthTime;
-                console.log("Meeting end time: " + meetingEndTime)
+                var u = database.ref("Groups/" + gID + "/meetingEnd");
+                u.transaction(function (currentEndTime) {
+                    return meetingEndTime;
+                })
             } else if(meetingStarted && Date.now() >= meetingEndTime) {
                 console.log("Meeting has ended!");
                 document.getElementById("color-button").disabled = true;
@@ -249,6 +259,7 @@
             }
 
             document.getElementById("color-button").innerHTML = timerMins + ":" + timerSecs;
+            document.getElementById("end-meeting").innerHTML = timerMins + ":" + timerSecs + "<br> You are over the meeting time. Tap here to end meeting.";
             document.getElementById("color-button").style.fontSize = "500%"; 
 
         }
