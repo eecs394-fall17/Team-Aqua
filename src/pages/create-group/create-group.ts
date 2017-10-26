@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, App } from 'ionic-angular';
 import { MeetingPage } from '../meeting/meeting'
 
 /**
@@ -15,11 +15,11 @@ import { MeetingPage } from '../meeting/meeting'
 })
 export class CreateGroupPage {
 
-  constructor(public navCtrl: NavController) {
+  constructor(public navCtrl: NavController, private app: App) {
     }
 
    joinMeeting() {
-  		this.navCtrl.push(MeetingPage);
+  		this.app.getRootNav().push(MeetingPage);
   }
 
   
